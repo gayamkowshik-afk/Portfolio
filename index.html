@@ -24,7 +24,48 @@ html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:"Inter",sans-serif;overflow-x:hidden;cursor:none}
 #cursor{position:fixed;width:10px;height:10px;background:var(--g1);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s;mix-blend-mode:screen;will-change:transform}
 #cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(74,222,128,0.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .15s,height .15s,border-color .15s;will-change:transform}
-#bg-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+#bg-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none}
+
+/* ── ANIME SKY BACKDROP ── */
+#anime-sky{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background:
+  radial-gradient(ellipse 70% 50% at 50% 18%, rgba(74,222,128,0.10), transparent 60%),
+  radial-gradient(ellipse 90% 60% at 80% 0%, rgba(34,211,238,0.08), transparent 55%),
+  linear-gradient(180deg, #04090a 0%, #061310 38%, #07150e 62%, #050c07 100%);
+}
+#anime-sky .sun{position:absolute;top:14%;left:50%;width:340px;height:340px;transform:translateX(-50%);border-radius:50%;
+  background:radial-gradient(circle at 50% 50%, rgba(245,200,66,0.35), rgba(245,200,66,0.12) 35%, transparent 70%);
+  filter:blur(2px);animation:sunpulse 8s ease-in-out infinite}
+@keyframes sunpulse{0%,100%{opacity:.7;transform:translateX(-50%) scale(1)}50%{opacity:1;transform:translateX(-50%) scale(1.06)}}
+#anime-sky .mtn{position:absolute;bottom:0;left:0;width:100%;height:42%;background-repeat:no-repeat;background-size:cover}
+#anime-sky .mtn1{height:30%;opacity:.55;clip-path:polygon(0% 100%,0% 55%,8% 40%,16% 58%,26% 30%,36% 52%,46% 22%,56% 48%,68% 18%,78% 44%,88% 26%,100% 50%,100% 100%);background:linear-gradient(180deg,rgba(34,211,238,0.10),rgba(5,12,7,0.95))}
+#anime-sky .mtn2{height:22%;opacity:.8;clip-path:polygon(0% 100%,0% 70%,10% 50%,22% 66%,34% 42%,48% 64%,60% 38%,72% 60%,86% 36%,100% 58%,100% 100%);background:linear-gradient(180deg,rgba(74,222,128,0.08),rgba(4,9,8,0.98))}
+#anime-sky .mist{position:absolute;bottom:0;left:0;width:100%;height:18%;background:linear-gradient(180deg,transparent,rgba(7,18,9,0.9));animation:mistdrift 14s ease-in-out infinite alternate}
+@keyframes mistdrift{from{opacity:.5}to{opacity:.85}}
+#anime-sky .stars{position:absolute;inset:0;background-image:radial-gradient(1.5px 1.5px at 20% 30%, rgba(226,245,229,0.5), transparent),radial-gradient(1px 1px at 70% 15%, rgba(226,245,229,0.4), transparent),radial-gradient(1.5px 1.5px at 85% 40%, rgba(226,245,229,0.35), transparent),radial-gradient(1px 1px at 40% 10%, rgba(226,245,229,0.3), transparent),radial-gradient(1.5px 1.5px at 55% 28%, rgba(226,245,229,0.4), transparent);opacity:.6;animation:twinkle 5s ease-in-out infinite alternate}
+@keyframes twinkle{from{opacity:.35}to{opacity:.75}}
+
+/* ── TREES (anime forest silhouette, swaying branches) ── */
+#anime-trees{position:fixed;inset:0;z-index:2;pointer-events:none;overflow:hidden}
+.tree{position:absolute;bottom:-2%;transform-origin:bottom center}
+.tree svg{display:block;filter:drop-shadow(0 0 30px rgba(74,222,128,.05))}
+.tree .branches{transform-origin:50% 100%;animation:treesway 6s ease-in-out infinite}
+.tree.t1{left:-3%;bottom:-4%;width:30vw;max-width:420px;opacity:.92}
+.tree.t2{right:-5%;bottom:-6%;width:34vw;max-width:480px;opacity:.85;animation-delay:-2s}
+.tree.t3{left:62%;bottom:-3%;width:18vw;max-width:260px;opacity:.5}
+.tree.t2 .branches{animation-duration:7.5s}
+.tree.t3 .branches{animation-duration:5.2s}
+@keyframes treesway{0%,100%{transform:rotate(-1.2deg)}50%{transform:rotate(1.4deg)}}
+
+/* ── FALLING LEAVES ── */
+#leaf-field{position:fixed;inset:0;z-index:3;pointer-events:none;overflow:hidden}
+.leaf{position:absolute;top:-5%;will-change:transform,opacity;animation-name:leaf-fall;animation-timing-function:linear;animation-iteration-count:infinite}
+@keyframes leaf-fall{
+  0%{transform:translate(0,0) rotate(0deg);opacity:0}
+  8%{opacity:.85}
+  50%{transform:translate(var(--sway),55vh) rotate(180deg)}
+  92%{opacity:.7}
+  100%{transform:translate(calc(var(--sway) * -1),115vh) rotate(360deg);opacity:0}
+}
 
 /* NAV */
 nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;justify-content:space-between;align-items:center;padding:1.2rem 4rem;transition:all .4s}
@@ -235,7 +276,54 @@ footer .fq{font-style:italic;color:var(--gold);margin-bottom:.7rem;font-family:"
 <body>
 <div id="cursor"></div>
 <div id="cursor-ring"></div>
+<div id="anime-sky">
+  <div class="stars"></div>
+  <div class="sun"></div>
+  <div class="mtn mtn1"></div>
+  <div class="mtn mtn2"></div>
+  <div class="mist"></div>
+</div>
 <canvas id="bg-canvas"></canvas>
+
+<div id="anime-trees">
+  <div class="tree t1">
+    <svg viewBox="0 0 300 420" xmlns="http://www.w3.org/2000/svg">
+      <path d="M150 420 L143 260 L150 420 Z" fill="#03100a"/>
+      <path d="M146 300 C90 290 70 250 60 210 C95 230 120 250 147 270 Z" fill="#03100a"/>
+      <path d="M150 280 C200 265 225 230 240 195 C205 215 175 240 150 260 Z" fill="#03100a"/>
+      <g class="branches">
+        <path d="M150 260 C100 240 75 190 65 140 C110 165 140 200 152 235 Z" fill="#061a10"/>
+        <path d="M150 250 C195 225 215 180 222 130 C190 158 165 195 150 228 Z" fill="#061a10"/>
+        <path d="M150 230 C120 200 110 160 112 115 C140 140 155 175 156 210 Z" fill="#0a2616"/>
+        <path d="M150 215 C175 190 190 150 190 105 C165 130 152 165 148 198 Z" fill="#0a2616"/>
+      </g>
+    </svg>
+  </div>
+  <div class="tree t2">
+    <svg viewBox="0 0 320 440" xmlns="http://www.w3.org/2000/svg">
+      <path d="M165 440 L156 270 L165 440 Z" fill="#03100a"/>
+      <g class="branches">
+        <path d="M160 280 C100 260 78 205 70 150 C115 178 145 215 162 255 Z" fill="#061a10"/>
+        <path d="M160 270 C220 245 245 195 255 145 C212 170 182 210 160 248 Z" fill="#061a10"/>
+        <path d="M160 245 C130 210 122 165 126 115 C152 142 165 180 166 220 Z" fill="#0a2616"/>
+        <path d="M160 225 C190 195 205 150 203 100 C175 128 162 168 158 205 Z" fill="#0a2616"/>
+        <path d="M160 205 C140 178 136 145 142 105 C160 128 168 158 168 188 Z" fill="#10311c"/>
+      </g>
+    </svg>
+  </div>
+  <div class="tree t3">
+    <svg viewBox="0 0 260 380" xmlns="http://www.w3.org/2000/svg">
+      <path d="M130 380 L124 240 L130 380 Z" fill="#03100a"/>
+      <g class="branches">
+        <path d="M128 250 C85 232 68 188 60 145 C98 168 120 200 132 232 Z" fill="#061a10"/>
+        <path d="M128 240 C172 220 192 180 198 138 C164 160 140 195 128 224 Z" fill="#061a10"/>
+        <path d="M128 215 C108 188 102 150 106 110 C128 134 138 168 138 200 Z" fill="#0a2616"/>
+      </g>
+    </svg>
+  </div>
+</div>
+
+<div id="leaf-field"></div>
 
 <!-- NAV -->
 <nav id="main-nav">
@@ -686,6 +774,37 @@ setTimeout(()=>{
   });
 },100);
 
+/* ── FALLING LEAVES (anime forest particles) ── */
+(function(){
+  const field = document.getElementById("leaf-field");
+  if(!field) return;
+  const leafColors = ["#4ade80","#22d3ee","#f5c842","#86e6a3"];
+  function leafSVG(color){
+    return `<svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+      <path d="M8 1C3 4 1 8 8 15C15 8 13 4 8 1Z" fill="${color}" opacity="0.55"/>
+      <path d="M8 1V15" stroke="${color}" stroke-width="0.6" opacity="0.6"/>
+    </svg>`;
+  }
+  function spawnLeaf(){
+    const el = document.createElement("div");
+    el.className = "leaf";
+    const size = 10 + Math.random()*14;
+    const dur = 9 + Math.random()*10;
+    const sway = 60 + Math.random()*120;
+    const left = Math.random()*100;
+    el.style.left = left + "vw";
+    el.style.width = size+"px";
+    el.style.height = size+"px";
+    el.style.setProperty("--sway", (Math.random()>0.5?1:-1)*sway + "px");
+    el.style.animationDuration = dur + "s";
+    el.style.animationDelay = (-Math.random()*dur) + "s";
+    el.innerHTML = leafSVG(leafColors[Math.floor(Math.random()*leafColors.length)]);
+    field.appendChild(el);
+  }
+  const LEAF_COUNT = window.innerWidth < 768 ? 10 : 22;
+  for(let i=0;i<LEAF_COUNT;i++) spawnLeaf();
+})();
+
 /* ── THREE.JS ── */
 (function(){
   const canvas=document.getElementById("bg-canvas");
@@ -701,24 +820,35 @@ setTimeout(()=>{
   const pl=new THREE.PointLight(0x22d3ee,0.5,50); pl.position.set(-10,5,0); scene.add(pl);
   const pl2=new THREE.PointLight(0xf5c842,0.3,40); pl2.position.set(10,-5,5); scene.add(pl2);
 
-  const N=1400;
-  const pos=new Float32Array(N*3), col=new Float32Array(N*3);
+  /* drifting glow particles — soft "ember / petal" field, anime night-sky feel */
+  const N=500;
+  const pos=new Float32Array(N*3), col=new Float32Array(N*3), spd=new Float32Array(N), sway=new Float32Array(N);
   for(let i=0;i<N;i++){
-    pos[i*3]=(Math.random()-.5)*90; pos[i*3+1]=(Math.random()-.5)*55; pos[i*3+2]=(Math.random()-.5)*70-8;
+    pos[i*3]=(Math.random()-.5)*90; pos[i*3+1]=(Math.random()-.5)*55; pos[i*3+2]=(Math.random()-.5)*60-8;
+    spd[i]=.004+Math.random()*.008; sway[i]=Math.random()*Math.PI*2;
     const t=Math.random();
-    if(t<.5){col[i*3]=.18;col[i*3+1]=.87;col[i*3+2]=.5;}
-    else if(t<.8){col[i*3]=.13;col[i*3+1]=.83;col[i*3+2]=.93;}
+    if(t<.45){col[i*3]=.18;col[i*3+1]=.87;col[i*3+2]=.5;}
+    else if(t<.75){col[i*3]=.13;col[i*3+1]=.83;col[i*3+2]=.93;}
     else{col[i*3]=.96;col[i*3+1]=.78;col[i*3+2]=.26;}
   }
   const geo=new THREE.BufferGeometry();
   geo.setAttribute("position",new THREE.BufferAttribute(pos,3));
   geo.setAttribute("color",new THREE.BufferAttribute(col,3));
-  const mat=new THREE.PointsMaterial({size:.07,vertexColors:true,transparent:true,opacity:.65});
+  const mat=new THREE.PointsMaterial({size:.1,vertexColors:true,transparent:true,opacity:.45,blending:THREE.AdditiveBlending,depthWrite:false});
   scene.add(new THREE.Points(geo,mat));
 
-  const gridMat=new THREE.LineBasicMaterial({color:0x0d2812,transparent:true,opacity:.35});
-  for(let i=-10;i<=10;i++){ const g=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(i*5,-30,-22),new THREE.Vector3(i*5,30,-22)]); scene.add(new THREE.Line(g,gridMat)); }
-  for(let i=-6;i<=6;i++){ const g=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-50,i*5,-22),new THREE.Vector3(50,i*5,-22)]); scene.add(new THREE.Line(g,gridMat)); }
+  /* a handful of larger soft "lantern" glows for depth/parallax */
+  const glowGeo=new THREE.BufferGeometry();
+  const gN=40, gPos=new Float32Array(gN*3), gCol=new Float32Array(gN*3);
+  for(let i=0;i<gN;i++){
+    gPos[i*3]=(Math.random()-.5)*80; gPos[i*3+1]=(Math.random()-.5)*45; gPos[i*3+2]=(Math.random()-.5)*40-15;
+    const t=Math.random();
+    if(t<.5){gCol[i*3]=.96;gCol[i*3+1]=.78;gCol[i*3+2]=.26;} else {gCol[i*3]=.18;gCol[i*3+1]=.87;gCol[i*3+2]=.5;}
+  }
+  glowGeo.setAttribute("position",new THREE.BufferAttribute(gPos,3));
+  glowGeo.setAttribute("color",new THREE.BufferAttribute(gCol,3));
+  const glowMat=new THREE.PointsMaterial({size:.9,vertexColors:true,transparent:true,opacity:.22,blending:THREE.AdditiveBlending,depthWrite:false});
+  scene.add(new THREE.Points(glowGeo,glowMat));
 
   let t=0,mx2=0,my2=0;
   document.addEventListener("mousemove",e=>{ mx2=(e.clientX/window.innerWidth-.5)*2; my2=(e.clientY/window.innerHeight-.5)*2; });
@@ -728,8 +858,15 @@ setTimeout(()=>{
     cam.position.y+=(-my2-.0-cam.position.y)*.025;
     cam.lookAt(0,0,0);
     const p=geo.attributes.position.array;
-    for(let i=0;i<N;i++){ p[i*3+1]+=Math.sin(t+i*.08)*.003; p[i*3]+=Math.cos(t*.6+i*.04)*.0015; }
+    for(let i=0;i<N;i++){
+      p[i*3+1]+=spd[i]; // gentle upward drift like floating embers
+      p[i*3]+=Math.sin(t*1.4+sway[i])*.004; // side-to-side sway like falling petals
+      if(p[i*3+1]>27) p[i*3+1]=-27;
+    }
     geo.attributes.position.needsUpdate=true;
+    const gp=glowGeo.attributes.position.array;
+    for(let i=0;i<gN;i++){ gp[i*3+1]+=Math.sin(t+i)*.004; }
+    glowGeo.attributes.position.needsUpdate=true;
     pl.intensity=.4+Math.sin(t)*.18; pl2.intensity=.2+Math.cos(t*.7)*.12;
     renderer.render(scene,cam);
   })();
